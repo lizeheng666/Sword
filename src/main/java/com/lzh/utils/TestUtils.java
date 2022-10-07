@@ -3,10 +3,7 @@ package com.lzh.utils;
 import com.lzh.pojo.ListNode;
 import com.lzh.pojo.TreeNode;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class TestUtils {
     /**
@@ -275,4 +272,164 @@ public class TestUtils {
         }
         return res;
     }
+
+    /**
+     * 剑指 Offer 17. 打印从1到最大的n位数
+     */
+    public static int[] printNumbers(int n) {
+        int arr[];
+        int num = 1;
+        if (n==0){
+            arr = new int[1];
+            return arr;
+        }else{
+            for(int i=0;i<n;i++){
+                num*=10;;
+            }
+            num-=1;
+            arr=new int[num];
+            for (int j=num-1;j>=0;j--){
+                arr[j]=j+1;
+            }
+            return arr;
+        }
+    }
+
+    /**
+     * 剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
+     * 输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数在数组的前半部分，所有偶数在数组的后半部分
+     */
+    public static int[] exchagne(int [] nums){
+        ArrayList<Integer> arr = new ArrayList<>();
+        for(int i=0;i<nums.length;i++){
+            if (nums[i]%2!=0){
+                arr.add(nums[i]);
+            }
+        }
+        for(int i=0;i<nums.length;i++){
+            if (nums[i]%2==0){
+                arr.add(nums[i]);
+            }
+        }
+        for(int i=0;i<nums.length;i++){
+            nums[i]=arr.get(i);
+        }
+        return nums;
+    }
+
+    public static boolean isNumber(String s) {
+        //  去除空格
+        s = s.trim();
+        char[] strArr = s.toCharArray();
+        for(int i=0;i<strArr.length;i++){
+            //开头是小数点的情况
+            if(strArr[i]=='.'){
+                return afterPoint(strArr,i+1);
+            }
+
+            //开头是正负号的情况
+            if(strArr[i]=='+'||strArr[i]=='-'){
+                return afterAddOrMinus(strArr,i+1);
+            }
+
+            //开头是纯数字
+            if (strArr[i]>=48&&strArr[i]<=57){
+                return afterNumber(strArr,i+1);
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean afterNumber(char[] strArr, int index) {
+        int num=0;
+        for(int i=index;i<strArr.length;i++){
+            if (num==0&&strArr[i]=='.'){
+                return afterPoint(strArr, i+1);
+            }
+            if (num==0&&(strArr[i]=='e'||strArr[i]=='E')){
+                return afterE(strArr,i+1);
+            }
+            if (strArr[i]<48||strArr[i]>57){
+                return false;
+            }
+            num++;
+        }
+        return true;
+    }
+
+    public static boolean afterPoint(char strArr[],int index){
+        if (index>=strArr.length){
+            return false;
+        }
+        for(int j=index;j<strArr.length;j++){
+            if (strArr[j]<48||strArr[j]>57){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean afterAddOrMinus(char strArr[],int index){
+        int num=0;
+        for(int i=index;i<strArr.length;i++){
+            if (num!=0&&strArr[i]=='.'){
+                return afterPoint(strArr, i+1);
+            }
+            if (num!=0&&(strArr[i]=='e'||strArr[i]=='E')){
+                return afterEPLUS(strArr,i+1);
+            }
+            if (strArr[i]<48||strArr[i]>57){
+                return false;
+            }
+            num++;
+        }
+        return true;
+    }
+
+    public static boolean afterE(char strArr[],int index){
+        if (index>=strArr.length){
+            return false;
+        }
+        int num=0;
+        for(int i=index;i<strArr.length;i++){
+            if (num!=0&&(strArr[i]=='+'||strArr[i]=='-')){
+                for(int j=i+1;j<strArr.length;j++){
+                    if (strArr[j]<48||strArr[j]>57){
+                        return false;
+                    }
+                }
+                return true;
+            }
+            if (strArr[i]<48||strArr[i]>57){
+                return false;
+            }
+            num++;
+        }
+        return true;
+    }
+
+    public static boolean afterEPLUS(char strArr[],int index){
+        if (index>=strArr.length){
+            return false;
+        }
+        int num=0;
+        for(int i=index;i<strArr.length;i++){
+            if (num==0&&(strArr[i]=='+'||strArr[i]=='-')){
+                for(int j=i+1;j<strArr.length;j++){
+                    if (strArr[j]<48||strArr[j]>57){
+                        return false;
+                    }
+                }
+                return true;
+            }
+            if (strArr[i]<48||strArr[i]>57){
+                return false;
+            }
+            num++;
+        }
+        return true;
+    }
+
+
 }
